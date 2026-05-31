@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>🎬 سینما کانال | نسخه نهایی</title>
+    
+    <!-- فونت گوگل برای آیکون تنظیمات -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -35,6 +39,7 @@
             --nav-bg: rgba(255, 255, 255, 0.75);
             --nav-shadow: rgba(0, 0, 0, 0.15);
             --glow-color: rgba(212, 165, 0, 0.5);
+            --icon-color: #1e293b;
         }
 
         [data-theme="dark"] {
@@ -59,6 +64,7 @@
             --nav-bg: rgba(20, 30, 45, 0.85);
             --nav-shadow: rgba(0, 0, 0, 0.5);
             --glow-color: rgba(255, 215, 0, 0.5);
+            --icon-color: #ffffff;
         }
 
         body {
@@ -69,7 +75,7 @@
             padding-bottom: 90px;
         }
 
-        /* ===== هدر سینمایی (بدون ویدیو، با انیمیشن) ===== */
+        /* ===== هدر سینمایی ===== */
         .cinema-hero {
             position: relative;
             width: 100%;
@@ -227,7 +233,6 @@
             padding-right: 16px;
         }
 
-        /* کارت‌های کوچک (بدون آیکون فیلم/موزیک روی تصویر) */
         .small-card {
             width: 160px;
             background: var(--bg-card);
@@ -312,7 +317,6 @@
             font-size: 10px;
         }
 
-        /* بخش نظرات */
         .comments-section {
             background: var(--bg-card);
             backdrop-filter: blur(10px);
@@ -410,7 +414,7 @@
             transition: all 0.3s;
         }
 
-        /* ===== نوار پایین لیکوئید گلس شیشه‌ای ===== */
+        /* ===== نوار پایین لیکوئید گلس ===== */
         .bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -431,7 +435,6 @@
             border: 1px solid rgba(255, 215, 0, 0.4);
         }
 
-        /* نور زیر نوار */
         .bottom-nav::after {
             content: '';
             position: absolute;
@@ -460,26 +463,27 @@
             background: rgba(255, 215, 0, 0.15);
         }
 
+        .nav-item.active .nav-icon,
+        .nav-item.active .material-icons {
+            stroke: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
         .nav-icon {
             width: 28px;
             height: 28px;
             fill: none;
-            stroke: var(--accent-gold);
+            stroke: var(--icon-color);
             stroke-width: 1.8;
             transition: all 0.2s;
         }
 
-        /* آیکون چرخ‌دنده حرفه‌ای و استاندارد ( gear ) */
-        .gear-icon {
-            width: 28px;
-            height: 28px;
-            fill: none;
-            stroke: var(--accent-gold);
-            stroke-width: 2;
-            transition: all 0.2s;
+        .material-icons {
+            font-size: 28px;
+            color: var(--icon-color);
         }
 
-        /* پنل جستجو */
+        /* ===== پنل جستجو ===== */
         .search-panel {
             position: fixed;
             top: 0;
@@ -506,6 +510,7 @@
             background: var(--input-bg);
             color: var(--text-primary);
             font-size: 16px;
+            margin-top: 20px;
         }
 
         .close-search {
@@ -524,7 +529,7 @@
             font-size: 24px;
         }
 
-        /* پنل تنظیمات */
+        /* ===== پنل تنظیمات ===== */
         .settings-panel {
             position: fixed;
             top: 0;
@@ -646,7 +651,7 @@
             font-size: 24px;
         }
 
-        /* صفحه دسته‌بندی */
+        /* ===== صفحه دسته‌بندی ===== */
         .category-page {
             position: fixed;
             top: 0;
@@ -729,10 +734,12 @@
             .glow-title { font-size: 28px; }
             .bottom-nav { width: calc(100% - 30px); padding: 10px 15px; }
             .nav-icon { width: 24px; height: 24px; }
-            .gear-icon { width: 24px; height: 24px; }
+            .material-icons { font-size: 24px; }
             .small-card { width: 140px; }
             .small-card-image { height: 100px; }
             .grid-2x2 { gap: 10px; }
+            .close-search { top: 15px; width: 35px; height: 35px; font-size: 20px; }
+            .search-panel input { margin-top: 25px; }
         }
 
         @media (min-width: 768px) {
@@ -826,11 +833,7 @@
             </svg>
         </div>
         <div class="nav-item" data-nav="settings">
-            <!-- چرخ‌دنده استاندارد ( gear ) با 8 دندانه -->
-            <svg class="gear-icon" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2.5" fill="none"/>
-                <path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m11.32 11.32l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m11.32-11.32l2.83-2.83" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
+            <i class="material-icons">settings</i>
         </div>
     </div>
 
@@ -891,6 +894,7 @@
 
     <script>
         (function() {
+            // ===== داده‌های فیلم‌ها =====
             const filmsData = Array(10).fill().map((_,i) => ({
                 title: `فیلم ${i+1}`,
                 titleEn: `Movie ${i+1}`,
@@ -900,6 +904,7 @@
                 channel: 'https://t.me/film_channel'
             }));
 
+            // ===== داده‌های سریال‌ها =====
             const seriesData = Array(10).fill().map((_,i) => ({
                 title: `سریال ${i+1}`,
                 titleEn: `Series ${i+1}`,
@@ -909,19 +914,39 @@
                 channel: 'https://t.me/series_channel'
             }));
 
-            const musicData = Array(10).fill().map((_,i) => ({
-                title: `آهنگ ${i+1}`,
-                titleEn: `Music ${i+1}`,
-                type: 'music',
-                meta: `👥 ${Math.floor(Math.random() * 5 + 1)}M`,
-                year: `۰۳:${Math.floor(Math.random() * 5 + 3)}`,
-                channel: 'https://t.me/music_channel'
-            }));
+            // ===== داده‌های موزیک‌ها (اصلاح شده برای انگلیسی) =====
+            const musicData = Array(10).fill().map((_,i) => {
+                const minutes = Math.floor(Math.random() * 5 + 3);
+                const seconds = Math.floor(Math.random() * 59);
+                const listeners = Math.floor(Math.random() * 5 + 1);
+                return {
+                    title: `آهنگ ${i+1}`,
+                    titleEn: `Music ${i+1}`,
+                    type: 'music',
+                    meta: `👥 ${listeners}M`,
+                    metaEn: `👥 ${listeners}M listeners`,
+                    year: `۰۳:${minutes.toString().padStart(2, '0')}`,
+                    yearEn: `${minutes}:${seconds.toString().padStart(2, '0')}`,
+                    channel: 'https://t.me/music_channel'
+                };
+            });
 
             function createSmallCard(item, lang) {
                 const isFilm = item.type === 'film';
                 const isMusic = item.type === 'music';
                 const title = lang === 'fa' ? item.title : item.titleEn;
+                
+                let metaDisplay = '';
+                if (lang === 'fa') {
+                    metaDisplay = `${item.meta} • ${item.year}`;
+                } else {
+                    if (isFilm || item.type === 'series') {
+                        const rating = parseFloat(item.meta.split('⭐')[1]);
+                        metaDisplay = `⭐ ${rating.toFixed(1)} • ${item.year} min`;
+                    } else if (isMusic) {
+                        metaDisplay = `${item.metaEn} • ${item.yearEn}`;
+                    }
+                }
                 
                 return `
                     <div class="small-card" data-channel="${item.channel}">
@@ -933,7 +958,7 @@
                         </div>
                         <div class="small-card-content">
                             <div class="small-card-title">${title}</div>
-                            <div class="small-card-meta">${item.meta} • ${item.year}</div>
+                            <div class="small-card-meta">${metaDisplay}</div>
                         </div>
                     </div>
                 `;
@@ -1078,16 +1103,57 @@
             const settingsPanel = document.getElementById('settingsPanel');
             const categoryPage = document.getElementById('categoryPage');
             
-            document.querySelector('[data-nav="search"]').addEventListener('click', () => searchPanel.classList.add('show'));
-            document.getElementById('closeSearch').addEventListener('click', () => searchPanel.classList.remove('show'));
+            const navItems = document.querySelectorAll('.nav-item');
+            let currentActive = null;
+
+            function setActiveNav(activeItem) {
+                navItems.forEach(item => item.classList.remove('active'));
+                if (activeItem) {
+                    activeItem.classList.add('active');
+                    currentActive = activeItem;
+                }
+            }
+
+            document.querySelector('[data-nav="home"]').addEventListener('click', () => {
+                setActiveNav(document.querySelector('[data-nav="home"]'));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
             
-            document.querySelector('[data-nav="settings"]').addEventListener('click', () => settingsPanel.classList.add('show'));
-            document.getElementById('closeSettings').addEventListener('click', () => settingsPanel.classList.remove('show'));
+            document.querySelector('[data-nav="categories"]').addEventListener('click', () => {
+                setActiveNav(document.querySelector('[data-nav="categories"]'));
+                categoryPage.classList.add('show');
+            });
             
-            document.querySelector('[data-nav="categories"]').addEventListener('click', () => categoryPage.classList.add('show'));
-            document.getElementById('closeCategory').addEventListener('click', () => categoryPage.classList.remove('show'));
+            document.querySelector('[data-nav="search"]').addEventListener('click', () => {
+                setActiveNav(document.querySelector('[data-nav="search"]'));
+                searchPanel.classList.add('show');
+            });
             
-            document.querySelector('[data-nav="home"]').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            document.querySelector('[data-nav="settings"]').addEventListener('click', () => {
+                setActiveNav(document.querySelector('[data-nav="settings"]'));
+                settingsPanel.classList.add('show');
+            });
+            
+            document.getElementById('closeSearch').addEventListener('click', () => {
+                searchPanel.classList.remove('show');
+                if (currentActive?.dataset.nav === 'search') setActiveNav(null);
+            });
+            
+            document.getElementById('closeSettings').addEventListener('click', () => {
+                settingsPanel.classList.remove('show');
+                if (currentActive?.dataset.nav === 'settings') setActiveNav(null);
+            });
+            
+            document.getElementById('closeCategory').addEventListener('click', () => {
+                categoryPage.classList.remove('show');
+                if (currentActive?.dataset.nav === 'categories') setActiveNav(null);
+            });
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY === 0 && currentActive?.dataset.nav !== 'home') {
+                    setActiveNav(document.querySelector('[data-nav="home"]'));
+                }
+            });
             
             const categoryGrid = document.getElementById('categoryGrid');
             for (let i = 0; i < 10; i++) {
@@ -1125,6 +1191,8 @@
             document.querySelectorAll('.lang-option').forEach(opt => {
                 opt.addEventListener('click', () => updateLanguage(opt.dataset.lang));
             });
+            
+            setActiveNav(document.querySelector('[data-nav="home"]'));
             
             renderAll(currentLang);
             renderComments();
