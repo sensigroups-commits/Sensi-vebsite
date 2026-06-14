@@ -1,1203 +1,574 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>🎬 سینما کانال | نسخه نهایی</title>
-    
-    <!-- فونت گوگل برای آیکون تنظیمات -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Vazir', 'Segoe UI', system-ui, sans-serif;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-        :root {
-            --bg-primary: #f5f7fa;
-            --bg-secondary: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --text-primary: #1e293b;
-            --text-secondary: #334155;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --accent-gold: #d4a500;
-            --accent-gold-light: #ffd700;
-            --card-bg: #ffffff;
-            --input-bg: #f1f5f9;
-            --hero-overlay: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 50%, #f5f7fa 100%);
-            --hero-text: #1e293b;
-            --comment-bg: #ffffff;
-            --icon-bg: #ffffff;
-            --icon-fill: #d4a500;
-            --nav-bg: rgba(255, 255, 255, 0.75);
-            --nav-shadow: rgba(0, 0, 0, 0.15);
-            --glow-color: rgba(212, 165, 0, 0.5);
-            --icon-color: #1e293b;
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #0a0c14;
-            --bg-secondary: #151e2f;
-            --bg-card: rgba(20, 30, 45, 0.8);
-            --text-primary: #ffffff;
-            --text-secondary: #e0e7ff;
-            --text-muted: #9aa9c1;
-            --border-color: #2d3748;
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --accent-gold: #ffd700;
-            --accent-gold-light: #ffaa00;
-            --card-bg: #1e2a3a;
-            --input-bg: #1e2842;
-            --hero-overlay: radial-gradient(circle at 30% 50%, rgba(255,215,0,0.15) 0%, transparent 60%),
-                            linear-gradient(180deg, rgba(10,12,20,0.9) 0%, rgba(10,12,20,0.6) 50%, #0a0c14 100%);
-            --hero-text: #ffffff;
-            --comment-bg: #1a233a;
-            --icon-bg: #1e2a3a;
-            --icon-fill: #ffd700;
-            --nav-bg: rgba(20, 30, 45, 0.85);
-            --nav-shadow: rgba(0, 0, 0, 0.5);
-            --glow-color: rgba(255, 215, 0, 0.5);
-            --icon-color: #ffffff;
-        }
-
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.2s ease;
-            overflow-x: hidden;
-            padding-bottom: 90px;
-        }
-
-        /* ===== هدر سینمایی ===== */
-        .cinema-hero {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0 0 40px 40px;
-            box-shadow: 0 25px 50px -8px var(--shadow-color);
-        }
-
-        .hero-bg-animation {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 40%, rgba(255,215,0,0.12) 0%, transparent 70%);
-            z-index: 0;
-            animation: pulseBg 4s ease-in-out infinite;
-        }
-
-        @keyframes pulseBg {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--hero-overlay);
-            z-index: 1;
-        }
-
-        .cinema-lights {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-        }
-
-        .light-beam {
-            position: absolute;
-            width: 200px;
-            height: 8px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold-light), rgba(255,255,255,0.8), var(--accent-gold-light), transparent);
-            filter: blur(8px);
-            transform: rotate(35deg);
-            animation: beamMove 12s infinite linear;
-            opacity: 0.3;
-        }
-
-        .light-beam:nth-child(1) { top: 20%; left: -10%; animation-duration: 14s; }
-        .light-beam:nth-child(2) { top: 60%; left: -5%; animation-duration: 18s; width: 300px; }
-        .light-beam:nth-child(3) { top: 80%; left: -15%; animation-duration: 16s; }
-        .light-beam:nth-child(4) { top: 30%; left: -20%; animation-duration: 20s; width: 400px; }
-
-        @keyframes beamMove {
-            0% { transform: rotate(35deg) translateX(-100px); }
-            100% { transform: rotate(35deg) translateX(1200px); }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            color: var(--hero-text);
-            padding: 20px;
-        }
-
-        .glow-title {
-            font-size: 42px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 10px 25px;
-            background: rgba(212, 165, 0, 0.15);
-            border: 2px solid var(--accent-gold);
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent-gold);
-        }
-
-        /* ===== بخش‌های افقی ===== */
-        .section {
-            margin: 30px 0;
-            padding: 0 16px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 0 10px;
-        }
-
-        .section-title {
-            color: var(--accent-gold);
-            font-size: 22px;
-            font-weight: 700;
-            border-right: 4px solid var(--accent-gold);
-            padding-right: 12px;
-        }
-
-        .horizontal-scroll {
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            scrollbar-width: thin;
-            padding: 10px 0 20px;
-            margin: 0 -16px;
-            padding-left: 16px;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar-track {
-            background: var(--border-color);
-            border-radius: 10px;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar-thumb {
-            background: var(--accent-gold);
-            border-radius: 10px;
-        }
-
-        .cards-horizontal {
-            display: inline-flex;
-            gap: 15px;
-            padding-right: 16px;
-        }
-
-        .small-card {
-            width: 160px;
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 20px -10px var(--shadow-color);
-            transition: all 0.3s ease;
-            white-space: normal;
-            cursor: pointer;
-        }
-
-        .small-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-gold);
-            box-shadow: 0 15px 25px -10px var(--shadow-color);
-        }
-
-        .small-card-image {
-            position: relative;
-            height: 120px;
-            background: var(--bg-secondary);
-            overflow: hidden;
-        }
-
-        .small-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .small-card:hover .small-card-image img {
-            transform: scale(1.05);
-        }
-
-        .small-card-play {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(145deg, var(--accent-gold), var(--accent-gold-light));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px var(--accent-gold);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .small-card-play:hover {
-            transform: scale(1.1) rotate(360deg);
-        }
-
-        .small-card-play svg {
-            width: 16px;
-            height: 16px;
-            fill: var(--bg-primary);
-        }
-
-        .small-card-content {
-            padding: 12px;
-        }
-
-        .small-card-title {
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .small-card-meta {
-            color: var(--text-muted);
-            font-size: 10px;
-        }
-
-        .comments-section {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 20px;
-            margin: 20px 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 30px -15px var(--shadow-color);
-        }
-
-        .comments-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .comments-count {
-            background: var(--input-bg);
-            padding: 4px 15px;
-            border-radius: 30px;
-            font-size: 14px;
-            border: 1px solid var(--accent-gold);
-        }
-
-        .comment-item {
-            background: var(--comment-bg);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-right: 4px solid var(--accent-gold);
-            transition: transform 0.2s;
-        }
-
-        .comment-name {
-            color: var(--accent-gold);
-            font-weight: 700;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-
-        .comment-date {
-            color: var(--text-muted);
-            font-size: 10px;
-        }
-
-        .comment-text {
-            color: var(--text-secondary);
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .comment-form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .comment-input, .comment-textarea {
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            padding: 12px 18px;
-            color: var(--text-primary);
-            font-size: 14px;
-            width: 100%;
-        }
-
-        .comment-textarea {
-            border-radius: 20px;
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .comment-input:focus, .comment-textarea:focus {
-            border-color: var(--accent-gold);
-            outline: none;
-        }
-
-        .send-comment {
-            background: linear-gradient(145deg, var(--accent-gold), var(--accent-gold-light));
-            color: var(--bg-primary);
-            border: none;
-            padding: 12px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        /* ===== نوار پایین لیکوئید گلس ===== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 400px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 8px 30px var(--nav-shadow);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-        }
-
-        .bottom-nav::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 10%;
-            width: 80%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), var(--accent-gold-light), var(--accent-gold), transparent);
-            border-radius: 10px;
-            filter: blur(6px);
-            opacity: 0.9;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            padding: 8px;
-            border-radius: 40px;
-        }
-
-        .nav-item:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 215, 0, 0.15);
-        }
-
-        .nav-item.active .nav-icon,
-        .nav-item.active .material-icons {
-            stroke: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .nav-icon {
-            width: 28px;
-            height: 28px;
-            fill: none;
-            stroke: var(--icon-color);
-            stroke-width: 1.8;
-            transition: all 0.2s;
-        }
-
-        .material-icons {
-            font-size: 28px;
-            color: var(--icon-color);
-        }
-
-        /* ===== پنل جستجو ===== */
-        .search-panel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
-            z-index: 2000;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            padding: 60px 20px 20px;
-            overflow-y: auto;
-        }
-
-        .search-panel.show {
-            transform: translateY(0);
-        }
-
-        .search-panel input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 50px;
-            border: 2px solid var(--accent-gold);
-            background: var(--input-bg);
-            color: var(--text-primary);
-            font-size: 16px;
-            margin-top: 20px;
-        }
-
-        .close-search {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--bg-primary);
-            font-size: 24px;
-        }
-
-        /* ===== پنل تنظیمات ===== */
-        .settings-panel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
-            z-index: 2000;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            padding: 60px 20px 20px;
-        }
-
-        .settings-panel.show {
-            transform: translateY(0);
-        }
-
-        .settings-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .settings-label {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .theme-switch-old {
-            display: flex;
-            background: var(--icon-bg);
-            backdrop-filter: blur(10px);
-            padding: 5px;
-            border-radius: 60px;
-            border: 2px solid var(--accent-gold);
-            box-shadow: 0 0 15px var(--accent-gold);
-        }
-
-        .theme-switch-old-inner {
-            display: flex;
-            gap: 8px;
-        }
-
-        .theme-btn-old {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .sun-icon-old {
-            width: 26px;
-            height: 26px;
-            fill: none;
-            stroke: #fbbf24;
-            stroke-width: 2;
-        }
-
-        .moon-icon-old {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: #94a3b8;
-            stroke-width: 2;
-        }
-
-        .theme-btn-old.active {
-            background: var(--accent-gold);
-            transform: scale(1.1);
-            box-shadow: 0 0 20px var(--accent-gold);
-        }
-
-        .theme-btn-old.active .sun-icon-old,
-        .theme-btn-old.active .moon-icon-old {
-            stroke: #0a0c14;
-            fill: #0a0c14;
-        }
-
-        .lang-btn {
-            display: flex;
-            gap: 10px;
-        }
-
-        .lang-option {
-            padding: 8px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            transition: all 0.2s;
-        }
-
-        .lang-option.active {
-            background: var(--accent-gold);
-            color: var(--bg-primary);
-        }
-
-        .close-settings {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--bg-primary);
-            font-size: 24px;
-        }
-
-        /* ===== صفحه دسته‌بندی ===== */
-        .category-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
-            z-index: 2000;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .category-page.show {
-            transform: translateY(0);
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px;
-        }
-
-        .category-header h2 {
-            color: var(--accent-gold);
-            font-size: 28px;
-        }
-
-        .close-category {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--bg-primary);
-            font-size: 24px;
-        }
-
-        .big-banner {
-            width: 100%;
-            height: auto;
-            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-primary));
-            border-radius: 20px;
-            margin: 20px 0;
-            aspect-ratio: 3411 / 1120;
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 10px 20px var(--shadow-color);
-        }
-
-        .grid-2x2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin: 20px 0;
-        }
-
-        .big-card {
-            background: var(--bg-card);
-            border-radius: 24px;
-            aspect-ratio: 1124 / 631;
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 10px 20px var(--shadow-color);
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .big-card:hover {
-            transform: scale(1.02);
-            border-color: var(--accent-gold-light);
-        }
-
-        @media (max-width: 600px) {
-            .cinema-hero { height: 300px; }
-            .glow-title { font-size: 28px; }
-            .bottom-nav { width: calc(100% - 30px); padding: 10px 15px; }
-            .nav-icon { width: 24px; height: 24px; }
-            .material-icons { font-size: 24px; }
-            .small-card { width: 140px; }
-            .small-card-image { height: 100px; }
-            .grid-2x2 { gap: 10px; }
-            .close-search { top: 15px; width: 35px; height: 35px; font-size: 20px; }
-            .search-panel input { margin-top: 25px; }
-        }
-
-        @media (min-width: 768px) {
-            .small-card { width: 180px; }
-            .small-card-image { height: 135px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>🎬 سینما کانال | نسخه Pro</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter','Vazir','Segoe UI',system-ui,sans-serif}
+
+:root{
+  --bg-primary:#f5f7fa;--bg-secondary:#ffffff;--bg-card:rgba(255,255,255,0.9);
+  --text-primary:#1e293b;--text-secondary:#334155;--text-muted:#64748b;
+  --border-color:#e2e8f0;--shadow-color:rgba(0,0,0,0.1);
+  --accent-gold:#d4a500;--accent-gold-light:#ffd700;
+  --card-bg:#ffffff;--input-bg:#f1f5f9;
+  --hero-overlay:linear-gradient(180deg,rgba(255,255,255,0.9) 0%,rgba(255,255,255,0.6) 50%,#f5f7fa 100%);
+  --hero-text:#1e293b;--comment-bg:#ffffff;--icon-bg:#ffffff;--icon-fill:#d4a500;
+  --glow-color:rgba(212,165,0,0.5);--icon-color:#1e293b;
+  --particle-color:rgba(212,165,0,0.6);--tilt-shadow:rgba(212,165,0,0.3);
+  
+  --glass-bg: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: rgba(0, 0, 0, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
+  --glass-caustic: rgba(255, 255, 255, 0.3);
+  --reflection-start: rgba(255, 255, 255, 0.5);
+  --reflection-end: rgba(255, 255, 255, 0.0);
+  --glare-color: rgba(255, 255, 255, 0.4);
+  --pill-bg: rgba(255, 255, 255, 0.75);
+  --pill-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  --divider: rgba(0, 0, 0, 0.12);
+}
+[data-theme="dark"]{
+  --bg-primary:#0a0c14;--bg-secondary:#151e2f;--bg-card:rgba(20,30,45,0.8);
+  --text-primary:#ffffff;--text-secondary:#e0e7ff;--text-muted:#9aa9c1;
+  --border-color:#2d3748;--shadow-color:rgba(0,0,0,0.5);
+  --accent-gold:#ffd700;--accent-gold-light:#ffaa00;
+  --card-bg:#1e2a3a;--input-bg:#1e2842;
+  --hero-overlay:radial-gradient(circle at 30% 50%,rgba(255,215,0,0.12) 0%,transparent 60%),
+    linear-gradient(180deg,rgba(10,12,20,0.9) 0%,rgba(10,12,20,0.6) 50%,#0a0c14 100%);
+  --hero-text:#ffffff;--comment-bg:#1a233a;--icon-bg:#1e2a3a;--icon-fill:#ffd700;
+  --glow-color:rgba(255,215,0,0.4);--icon-color:#ffffff;
+  --particle-color:rgba(255,215,0,0.4);--tilt-shadow:rgba(255,215,0,0.2);
+  
+  --glass-bg: rgba(25, 30, 40, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+  --glass-highlight: rgba(255, 255, 255, 0.15);
+  --glass-caustic: rgba(255, 255, 255, 0.03);
+  --reflection-start: rgba(255, 255, 255, 0.1);
+  --reflection-end: rgba(255, 255, 255, 0.0);
+  --glare-color: rgba(255, 255, 255, 0.1);
+  --pill-bg: rgba(55, 60, 70, 0.8);
+  --pill-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  --divider: rgba(255, 255, 255, 0.12);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:4px;height:3px}
+::-webkit-scrollbar-track{background:var(--border-color);border-radius:10px}
+::-webkit-scrollbar-thumb{background:var(--accent-gold);border-radius:10px}
+
+/* ===== BASE ===== */
+body{background:var(--bg-primary);color:var(--text-primary);transition:background-color .3s,color .2s;overflow-x:hidden;padding-bottom:85px;font-size:14px}
+
+/* ===== PAGE TRANSITION ===== */
+.page-transition{position:fixed;inset:0;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-light));z-index:99997;transform:scaleY(0);transform-origin:bottom;pointer-events:none}
+.page-transition.enter{animation:ptEnter .5s cubic-bezier(.76,0,.24,1) forwards}
+@keyframes ptEnter{0%{transform:scaleY(0);transform-origin:bottom}50%{transform:scaleY(1);transform-origin:bottom}50.01%{transform-origin:top}100%{transform:scaleY(0);transform-origin:top}}
+
+/* ===== PARTICLES CANVAS ===== */
+#particleCanvas{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4}
+
+/* ===== HERO ===== */
+.cinema-hero{position:relative;width:100%;height:280px;background:linear-gradient(145deg,var(--bg-secondary) 0%,var(--bg-primary) 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:0 0 30px 30px;box-shadow:0 15px 30px -10px var(--shadow-color)}
+.hero-bg-animation{position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 30% 40%,rgba(255,215,0,0.1) 0%,transparent 70%);z-index:0;animation:pulseBg 4s ease-in-out infinite}
+@keyframes pulseBg{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.8;transform:scale(1.03)}}
+
+/* Aurora Lights (برگشت داده شد) */
+.aurora{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.aurora-band{position:absolute;width:200%;height:180px;border-radius:50%;filter:blur(40px);opacity:.12;animation:auroraMove 10s ease-in-out infinite}
+.aurora-band:nth-child(1){background:linear-gradient(90deg,transparent,rgba(100,220,255,1),rgba(150,100,255,1),transparent);top:10%;left:-50%;animation-duration:12s}
+.aurora-band:nth-child(2){background:linear-gradient(90deg,transparent,rgba(255,200,100,1),rgba(255,100,200,1),transparent);top:40%;left:-30%;animation-duration:15s;animation-delay:-4s}
+.aurora-band:nth-child(3){background:linear-gradient(90deg,transparent,rgba(100,255,180,1),rgba(100,150,255,1),transparent);top:65%;left:-40%;animation-duration:18s;animation-delay:-8s}
+@keyframes auroraMove{0%,100%{transform:translateX(0) skewX(-5deg)}50%{transform:translateX(15%) skewX(5deg)}}
+
+.cinema-lights{position:absolute;width:100%;height:100%;z-index:2;pointer-events:none}
+.light-beam{position:absolute;width:200px;height:6px;background:linear-gradient(90deg,transparent,var(--accent-gold-light),rgba(255,255,255,.6),var(--accent-gold-light),transparent);filter:blur(6px);transform:rotate(35deg);animation:beamMove 12s infinite linear;opacity:.25}
+.light-beam:nth-child(1){top:20%;left:-10%;animation-duration:14s}
+.light-beam:nth-child(2){top:60%;left:-5%;animation-duration:18s;width:250px}
+.light-beam:nth-child(3){top:80%;left:-15%;animation-duration:16s}
+@keyframes beamMove{0%{transform:rotate(35deg) translateX(-100px)}100%{transform:rotate(35deg) translateX(1000px)}}
+
+.hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--hero-overlay);z-index:1}
+.hero-content{position:relative;z-index:10;text-align:center;color:var(--hero-text);padding:15px;width:100%}
+
+.glow-title{font-size:32px;font-weight:900;letter-spacing:2px;margin-bottom:10px;background:linear-gradient(135deg,var(--accent-gold-light),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-size:15px;margin-bottom:12px;color:var(--text-secondary);opacity:0.9}
+.hero-badge{display:inline-block;padding:6px 18px;background:rgba(212,165,0,.15);border:1.5px solid var(--accent-gold);border-radius:40px;backdrop-filter:blur(8px);font-size:12px;font-weight:600;color:var(--accent-gold)}
+
+/* ===== SCROLL PROGRESS ===== */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent-gold),var(--accent-gold-light));z-index:9999;width:0%;transition:width .1s linear}
+
+/* ===== TOAST ===== */
+.toast-container{position:fixed;top:20px;right:20px;z-index:9990;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--card-bg);backdrop-filter:blur(16px);border:1px solid var(--accent-gold);border-radius:14px;padding:10px 16px;color:var(--text-primary);font-size:13px;font-weight:500;box-shadow:0 6px 20px var(--shadow-color);display:flex;align-items:center;gap:8px;transform:translateX(120%);animation:toastIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
+.toast.hide{animation:toastOut .3s ease forwards}
+@keyframes toastIn{to{transform:translateX(0)}}
+@keyframes toastOut{to{transform:translateX(120%);opacity:0}}
+
+/* ===== SECTION ===== */
+.section{margin:20px 0;padding:0 12px;position:relative;z-index:1}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 6px}
+.section-title{color:var(--accent-gold);font-size:18px;font-weight:700;border-right:3px solid var(--accent-gold);padding-right:10px}
+.view-toggle{display:flex;gap:5px}
+.view-btn{width:28px;height:28px;border:1.5px solid var(--border-color);border-radius:6px;background:var(--bg-card);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px}
+.view-btn.active{border-color:var(--accent-gold);color:var(--accent-gold);background:rgba(255,215,0,.1)}
+
+.filter-bar{display:flex;gap:6px;overflow-x:auto;padding:4px 8px 10px}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:5px 14px;border-radius:25px;border:1.5px solid var(--border-color);background:var(--bg-card);color:var(--text-muted);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.filter-chip.active{border-color:var(--accent-gold);background:rgba(255,215,0,.12);color:var(--accent-gold)}
+
+.horizontal-scroll{overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:8px 0 15px;margin:0 -12px;padding-left:12px}
+.horizontal-scroll::-webkit-scrollbar{height:3px}
+.cards-horizontal{display:inline-flex;gap:12px;padding-right:12px}
+.cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 6px}
+
+.small-card{width:140px;background:var(--bg-card);backdrop-filter:blur(12px);border-radius:16px;overflow:hidden;border:1px solid var(--border-color);box-shadow:0 6px 12px -8px var(--shadow-color);transition:all .3s ease;white-space:normal;cursor:pointer;position:relative}
+.small-card:hover{border-color:var(--accent-gold);transform:translateY(-3px)}
+.cards-grid .small-card{width:100%}
+.small-card-image{position:relative;height:100px;background:var(--bg-secondary);overflow:hidden}
+.small-card-image img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.small-card:hover .small-card-image img{transform:scale(1.05)}
+.card-stars{position:absolute;bottom:4px;right:6px;font-size:9px;color:#ffd700}
+.card-like,.card-save{position:absolute;width:26px;height:26px;background:rgba(0,0,0,.4);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;backdrop-filter:blur(4px);z-index:3}
+.card-like{top:6px;left:6px}
+.card-save{top:38px;left:6px}
+.card-like.liked{background:rgba(255,50,80,.7)}
+.card-save.saved{background:rgba(255,215,0,.7)}
+.small-card-play{position:absolute;bottom:6px;left:6px;width:28px;height:28px;background:linear-gradient(145deg,var(--accent-gold),var(--accent-gold-light));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--accent-gold);text-decoration:none}
+.small-card-play svg{width:12px;height:12px;fill:var(--bg-primary)}
+.small-card-content{padding:8px}
+.small-card-title{font-size:12px;font-weight:700;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text-primary)}
+.small-card-meta{color:var(--text-muted);font-size:9px;display:flex;align-items:center;gap:4px}
+.watch-progress{height:2px;background:var(--border-color);border-radius:2px;margin-top:5px;overflow:hidden}
+.watch-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-gold),var(--accent-gold-light))}
+.card-badge{position:absolute;top:6px;right:6px;padding:2px 8px;border-radius:15px;font-size:9px;font-weight:700;z-index:2}
+.badge-new{background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff}
+.badge-hot{background:linear-gradient(135deg,#ff416c,#ff4b2b);color:#fff}
+
+.scroll-top{position:fixed;bottom:85px;left:12px;width:36px;height:36px;border-radius:50%;background:linear-gradient(145deg,var(--accent-gold),var(--accent-gold-light));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 3px 12px var(--glow-color);z-index:500;transform:scale(0);transition:transform .3s cubic-bezier(.34,1.56,.64,1);color:#000}
+.scroll-top.visible{transform:scale(1)}
+
+.stats-bar{display:flex;justify-content:space-around;padding:12px 16px;margin:0 12px 10px;background:var(--bg-card);border-radius:20px;border:1px solid var(--border-color);backdrop-filter:blur(8px)}
+.stat-item{text-align:center}
+.stat-number{font-size:18px;font-weight:900;color:var(--accent-gold);display:block;line-height:1}
+.stat-label{font-size:10px;color:var(--text-muted);margin-top:3px}
+
+.comments-section{background:var(--bg-card);backdrop-filter:blur(8px);border-radius:24px;padding:16px;margin:16px 12px;border:1px solid var(--border-color)}
+.comments-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:15px;font-weight:700}
+.comments-count{background:var(--input-bg);padding:3px 12px;border-radius:20px;font-size:12px;border:1px solid var(--accent-gold)}
+.comment-item{background:var(--comment-bg);border-radius:16px;padding:12px;margin-bottom:10px;border-right:3px solid var(--accent-gold)}
+.comment-name{color:var(--accent-gold);font-weight:700;font-size:13px;display:flex;justify-content:space-between;margin-bottom:4px}
+.comment-date{color:var(--text-muted);font-size:9px}
+.comment-text{color:var(--text-secondary);font-size:12px;line-height:1.4}
+.comment-actions{margin-top:6px}
+.comment-like-btn{background:none;border:none;color:var(--text-muted);font-size:11px;cursor:pointer;display:flex;align-items:center;gap:3px}
+.comment-like-btn.liked{color:#ff4b6e}
+.comment-form{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.comment-input,.comment-textarea{background:var(--input-bg);border:1px solid var(--border-color);border-radius:20px;padding:10px 14px;color:var(--text-primary);font-size:13px;width:100%}
+.comment-textarea{min-height:60px;resize:vertical}
+.send-comment{background:linear-gradient(145deg,var(--accent-gold),var(--accent-gold-light));color:var(--bg-primary);border:none;padding:10px;border-radius:25px;font-weight:700;font-size:14px;cursor:pointer}
+.emoji-bar{display:flex;gap:5px;flex-wrap:wrap}
+.emoji-btn{background:var(--input-bg);border:1px solid var(--border-color);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:14px}
+
+/* ===== LIQUID GLASS NAVIGATION (جمع‌وجورتر با ۴ دکمه) ===== */
+.liquid-nav {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 50px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  box-shadow: 0 15px 35px -12px var(--glass-shadow), inset 0 1px 2px -0.5px var(--glass-highlight), inset 0 0 0 1px var(--glass-border);
+  transition: all 0.4s ease;
+  z-index: 1000;
+  gap: 6px;
+}
+
+.liquid-nav::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  right: 3px;
+  height: 38%;
+  border-radius: 50px 50px 20px 20px;
+  background: linear-gradient(180deg, var(--reflection-start) 0%, var(--reflection-end) 100%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.liquid-glare-container {
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.liquid-glare {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), var(--glare-color) 0%, transparent 70%);
+  mix-blend-mode: overlay;
+}
+
+.liquid-nav:hover .liquid-glare {
+  opacity: 1;
+}
+
+.nav-items {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  z-index: 3;
+}
+
+.active-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 38px;
+  background: var(--pill-bg);
+  border-radius: 50px;
+  box-shadow: var(--pill-shadow);
+  transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1), width 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.nav-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0 14px;
+  height: 38px;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--icon-color);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  outline: none;
+  z-index: 2;
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.nav-btn:active .btn-content {
+  transform: scale(0.95);
+}
+
+.nav-btn.active {
+  color: var(--accent-gold);
+}
+
+.nav-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.8;
+}
+
+.theme-glass-btn {
+  background: transparent;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--icon-color);
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.theme-glass-btn:hover {
+  color: var(--accent-gold);
+}
+
+.theme-icon-wrapper {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.theme-icon-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+  stroke-width: 2;
+  width: 20px;
+  height: 20px;
+}
+
+.sun-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+.moon-icon { opacity: 0; transform: rotate(-90deg) scale(0); }
+[data-theme="dark"] .sun-icon { opacity: 0; transform: rotate(90deg) scale(0); }
+[data-theme="dark"] .moon-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+
+/* Responsive - موبایل */
+@media (max-width: 500px) {
+  .nav-btn { padding: 0 10px; }
+  .nav-btn .btn-content span { font-size: 11px; }
+  .nav-btn svg { width: 14px; height: 14px; }
+  .theme-glass-btn { width: 36px; height: 36px; }
+  .theme-icon-wrapper svg { width: 18px; height: 18px; }
+  .active-pill { height: 36px; }
+  .liquid-nav { padding: 4px 8px; gap: 4px; }
+}
+
+@media (max-width: 420px) {
+  .nav-btn { padding: 0 8px; }
+  .nav-btn .btn-content span { font-size: 10px; }
+  .theme-glass-btn { width: 34px; height: 34px; }
+}
+
+/* ===== PANELS ===== */
+.search-panel,.settings-panel,.category-page,.watchlist-panel{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-primary);z-index:2000;transform:translateY(100%);transition:transform .3s ease;padding:50px 16px 20px;overflow-y:auto}
+.search-panel.show,.settings-panel.show,.category-page.show,.watchlist-panel.show{transform:translateY(0)}
+.search-panel input{width:100%;padding:12px;border-radius:40px;border:1.5px solid var(--accent-gold);background:var(--input-bg);color:var(--text-primary);font-size:14px;margin-top:15px}
+.close-btn{position:absolute;top:15px;left:15px;width:36px;height:36px;border-radius:50%;background:var(--accent-gold);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--bg-primary);font-size:18px;font-weight:700;border:none}
+.settings-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border-color)}
+.settings-label{font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px;color:var(--text-primary)}
+.lang-btn{display:flex;gap:6px}
+.lang-option{padding:6px 14px;border-radius:25px;cursor:pointer;background:var(--input-bg);color:var(--text-primary);font-size:12px;border:1px solid transparent}
+.lang-option.active{background:var(--accent-gold);color:var(--bg-primary)}
+.color-themes{display:flex;gap:8px;flex-wrap:wrap}
+.color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.color-dot.active{border-color:var(--text-primary);transform:scale(1.1)}
+.font-size-ctrl{display:flex;align-items:center;gap:8px}
+.fs-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--accent-gold);background:transparent;color:var(--accent-gold);font-size:16px;cursor:pointer}
+.fs-val{min-width:35px;text-align:center;font-size:13px;color:var(--text-primary)}
+.category-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.category-header h2{color:var(--accent-gold);font-size:22px}
+.grid-2x2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}
+.big-card{background:var(--bg-card);border-radius:20px;aspect-ratio:1/0.6;border:1px solid var(--accent-gold);cursor:pointer}
+.watchlist-panel h2{color:var(--accent-gold);font-size:20px;margin-bottom:15px}
+.watchlist-empty{text-align:center;padding:40px;color:var(--text-muted);font-size:14px}
+.watchlist-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.search-suggestions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.suggestion-chip{padding:5px 12px;border-radius:20px;background:var(--input-bg);border:1px solid var(--border-color);font-size:11px;cursor:pointer;color:var(--text-muted)}
+</style>
 </head>
 <body>
-    <!-- ===== هدر سینمایی ===== -->
-    <header class="cinema-hero">
-        <div class="hero-bg-animation"></div>
-        <div class="hero-overlay"></div>
-        <div class="cinema-lights">
-            <div class="light-beam"></div>
-            <div class="light-beam"></div>
-            <div class="light-beam"></div>
-            <div class="light-beam"></div>
-        </div>
-        <div class="hero-content">
-            <h1 class="glow-title" id="mainTitle">سینما کانال</h1>
-            <div class="subtitle" id="subtitleText">Cinematic Experience</div>
-            <div class="hero-badge" id="badgeText">⭐ جدیدترین فیلم‌ها و آهنگ‌ها ⭐</div>
-        </div>
-    </header>
 
-    <main>
-        <div class="section">
-            <div class="section-header">
-                <h2 class="section-title" id="filmsTitle">🎬 فیلم‌ها</h2>
-                <span style="color:var(--text-muted); font-size:12px;">+۱۰</span>
-            </div>
-            <div class="horizontal-scroll">
-                <div class="cards-horizontal" id="filmsContainer"></div>
-            </div>
-        </div>
+<div class="page-transition" id="pageTransition"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="toast-container" id="toastContainer"></div>
+<canvas id="particleCanvas"></canvas>
+<button class="scroll-top" id="scrollTop" title="بازگشت به بالا">↑</button>
 
-        <div class="section">
-            <div class="section-header">
-                <h2 class="section-title" id="seriesTitle">📺 سریال‌ها</h2>
-                <span style="color:var(--text-muted); font-size:12px;">+۱۰</span>
-            </div>
-            <div class="horizontal-scroll">
-                <div class="cards-horizontal" id="seriesContainer"></div>
-            </div>
-        </div>
+<!-- HERO با نورهای آئورورا -->
+<header class="cinema-hero" id="heroSection">
+  <div class="hero-bg-animation"></div>
+  <div class="aurora">
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+  </div>
+  <div class="cinema-lights">
+    <div class="light-beam"></div>
+    <div class="light-beam"></div>
+    <div class="light-beam"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="glow-title" id="mainTitle">سینما کانال</h1>
+    <div class="subtitle" id="subtitleText">تجربه سینمایی</div>
+    <div class="hero-badge" id="badgeText">⭐ جدیدترین فیلم‌ها و آهنگ‌ها ⭐</div>
+  </div>
+</header>
 
-        <div class="section">
-            <div class="section-header">
-                <h2 class="section-title" id="musicTitle">🎵 آهنگ‌ها</h2>
-                <span style="color:var(--text-muted); font-size:12px;">+۱۰</span>
-            </div>
-            <div class="horizontal-scroll">
-                <div class="cards-horizontal" id="musicContainer"></div>
-            </div>
-        </div>
+<main>
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item"><span class="stat-number" data-target="1240" id="statFilms">0</span><div class="stat-label">فیلم</div></div>
+    <div class="stat-item"><span class="stat-number" data-target="380" id="statSeries">0</span><div class="stat-label">سریال</div></div>
+    <div class="stat-item"><span class="stat-number" data-target="5600" id="statMusic">0</span><div class="stat-label">آهنگ</div></div>
+    <div class="stat-item"><span class="stat-number" data-target="98" id="statUsers">0</span><div class="stat-label">هزار کاربر</div></div>
+  </div>
 
-        <div class="comments-section">
-            <div class="comments-header">
-                <span id="commentsLabel">💬 نظرات کاربران</span>
-                <span class="comments-count" id="commentsCount">۰</span>
-            </div>
-            <div id="commentsList"></div>
-            <div class="comment-form">
-                <input type="text" class="comment-input" id="commentName" placeholder="نام شما">
-                <textarea class="comment-textarea" id="commentMessage" placeholder="نظر شما..."></textarea>
-                <button class="send-comment" id="sendCommentBtn">📨 ارسال نظر</button>
-            </div>
-        </div>
-    </main>
-
-    <!-- ===== نوار پایین لیکوئید گلس ===== -->
-    <div class="bottom-nav">
-        <div class="nav-item" data-nav="home">
-            <svg class="nav-icon" viewBox="0 0 24 24">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-5v-7H9v7H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" fill="none"/>
-            </svg>
-        </div>
-        <div class="nav-item" data-nav="categories">
-            <svg class="nav-icon" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                <rect x="13" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                <rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                <rect x="13" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-            </svg>
-        </div>
-        <div class="nav-item" data-nav="search">
-            <svg class="nav-icon" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-        </div>
-        <div class="nav-item" data-nav="settings">
-            <i class="material-icons">settings</i>
-        </div>
+  <div class="section">
+    <div class="section-header"><h2 class="section-title" id="filmsTitle">🎬 فیلم‌ها</h2>
+      <div class="view-toggle"><button class="view-btn active" data-section="films" data-view="scroll">☰</button><button class="view-btn" data-section="films" data-view="grid">⊞</button></div>
     </div>
-
-    <!-- پنل جستجو -->
-    <div class="search-panel" id="searchPanel">
-        <div class="close-search" id="closeSearch">✕</div>
-        <input type="text" id="searchInput" placeholder="جستجوی فیلم، سریال، آهنگ...">
-        <div id="searchResults" style="margin-top:20px;"></div>
+    <div class="filter-bar" id="filmsFilter">
+      <div class="filter-chip active" data-filter="all">همه</div>
+      <div class="filter-chip" data-filter="action">اکشن</div>
+      <div class="filter-chip" data-filter="drama">درام</div>
+      <div class="filter-chip" data-filter="comedy">کمدی</div>
+      <div class="filter-chip" data-filter="horror">ترسناک</div>
+      <div class="filter-chip" data-filter="sci-fi">علمی‌تخیلی</div>
     </div>
+    <div id="filmsView"><div class="horizontal-scroll"><div class="cards-horizontal" id="filmsContainer"></div></div></div>
+  </div>
 
-    <!-- پنل تنظیمات -->
-    <div class="settings-panel" id="settingsPanel">
-        <div class="close-settings" id="closeSettings">✕</div>
-        <div class="settings-item">
-            <span class="settings-label" id="langLabel">زبان</span>
-            <div class="lang-btn">
-                <div class="lang-option active" data-lang="fa">فارسی</div>
-                <div class="lang-option" data-lang="en">English</div>
-            </div>
-        </div>
-        <div class="settings-item">
-            <span class="settings-label" id="themeLabel">حالت نمایش</span>
-            <div class="theme-switch-old">
-                <div class="theme-switch-old-inner">
-                    <button class="theme-btn-old" id="lightThemeBtn">
-                        <svg class="sun-icon-old" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="5"/>
-                            <line x1="12" y1="1" x2="12" y2="3"/>
-                            <line x1="12" y1="21" x2="12" y2="23"/>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                            <line x1="1" y1="12" x2="3" y2="12"/>
-                            <line x1="21" y1="12" x2="23" y2="12"/>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                        </svg>
-                    </button>
-                    <button class="theme-btn-old" id="darkThemeBtn">
-                        <svg class="moon-icon-old" viewBox="0 0 24 24">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <div class="section">
+    <div class="section-header"><h2 class="section-title" id="seriesTitle">📺 سریال‌ها</h2>
+      <div class="view-toggle"><button class="view-btn active" data-section="series" data-view="scroll">☰</button><button class="view-btn" data-section="series" data-view="grid">⊞</button></div>
     </div>
+    <div id="seriesView"><div class="horizontal-scroll"><div class="cards-horizontal" id="seriesContainer"></div></div></div>
+  </div>
 
-    <!-- صفحه دسته‌بندی -->
-    <div class="category-page" id="categoryPage">
-        <div class="category-header">
-            <h2 id="categoryTitle">دسته بندی‌ها</h2>
-            <div class="close-category" id="closeCategory">✕</div>
-        </div>
-        <div class="big-banner"></div>
-        <div class="grid-2x2" id="categoryGrid"></div>
-        <div class="big-banner"></div>
+  <div class="section">
+    <div class="section-header"><h2 class="section-title" id="musicTitle">🎵 آهنگ‌ها</h2>
+      <div class="view-toggle"><button class="view-btn active" data-section="music" data-view="scroll">☰</button><button class="view-btn" data-section="music" data-view="grid">⊞</button></div>
     </div>
+    <div id="musicView"><div class="horizontal-scroll"><div class="cards-horizontal" id="musicContainer"></div></div></div>
+  </div>
 
-    <script>
-        (function() {
-            // ===== داده‌های فیلم‌ها =====
-            const filmsData = Array(10).fill().map((_,i) => ({
-                title: `فیلم ${i+1}`,
-                titleEn: `Movie ${i+1}`,
-                type: 'film',
-                meta: `⭐ ${(8 + Math.random()).toFixed(1)}`,
-                year: `${2015 + i}`,
-                channel: 'https://t.me/film_channel'
-            }));
+  <div class="comments-section">
+    <div class="comments-header"><span id="commentsLabel">💬 نظرات کاربران</span><span class="comments-count" id="commentsCount">۰</span></div>
+    <div id="commentsList"></div>
+    <div class="comment-form">
+      <input type="text" class="comment-input" id="commentName" placeholder="نام شما">
+      <textarea class="comment-textarea" id="commentMessage" placeholder="نظر شما..."></textarea>
+      <div class="emoji-bar" id="emojiBar">
+        <button class="emoji-btn" data-emoji="😍">😍</button><button class="emoji-btn" data-emoji="🔥">🔥</button>
+        <button class="emoji-btn" data-emoji="👏">👏</button><button class="emoji-btn" data-emoji="❤️">❤️</button>
+        <button class="emoji-btn" data-emoji="😂">😂</button><button class="emoji-btn" data-emoji="🎬">🎬</button>
+      </div>
+      <button class="send-comment" id="sendCommentBtn">📨 ارسال نظر</button>
+    </div>
+  </div>
+</main>
 
-            // ===== داده‌های سریال‌ها =====
-            const seriesData = Array(10).fill().map((_,i) => ({
-                title: `سریال ${i+1}`,
-                titleEn: `Series ${i+1}`,
-                type: 'series',
-                meta: `⭐ ${(8 + Math.random()).toFixed(1)}`,
-                year: `${2018 + i}`,
-                channel: 'https://t.me/series_channel'
-            }));
+<!-- LIQUID GLASS NAVIGATION (بدون آیکون ذخیره‌ها، با ۴ دکمه) -->
+<nav class="liquid-nav" id="liquidNav">
+  <div class="liquid-glare-container"><div class="liquid-glare" id="navGlare"></div></div>
+  <div class="nav-items" id="navItemsContainer">
+    <div class="active-pill" id="activePill"></div>
+    <button class="nav-btn active" data-nav-action="home"><div class="btn-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span id="navHome">خانه</span></div></button>
+    <button class="nav-btn" data-nav-action="categories"><div class="btn-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span id="navCategories">دسته‌ها</span></div></button>
+    <button class="nav-btn" data-nav-action="search"><div class="btn-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span id="navSearch">جستجو</span></div></button>
+    <button class="nav-btn" data-nav-action="settings"><div class="btn-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span id="navSettings">تنظیمات</span></div></button>
+  </div>
+  <button class="theme-glass-btn" id="glassThemeBtn"><div class="theme-icon-wrapper"><svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div></button>
+</nav>
 
-            // ===== داده‌های موزیک‌ها (اصلاح شده برای انگلیسی) =====
-            const musicData = Array(10).fill().map((_,i) => {
-                const minutes = Math.floor(Math.random() * 5 + 3);
-                const seconds = Math.floor(Math.random() * 59);
-                const listeners = Math.floor(Math.random() * 5 + 1);
-                return {
-                    title: `آهنگ ${i+1}`,
-                    titleEn: `Music ${i+1}`,
-                    type: 'music',
-                    meta: `👥 ${listeners}M`,
-                    metaEn: `👥 ${listeners}M listeners`,
-                    year: `۰۳:${minutes.toString().padStart(2, '0')}`,
-                    yearEn: `${minutes}:${seconds.toString().padStart(2, '0')}`,
-                    channel: 'https://t.me/music_channel'
-                };
-            });
+<!-- Panels -->
+<div class="search-panel" id="searchPanel"><button class="close-btn" id="closeSearch">✕</button><input type="text" id="searchInput" placeholder="جستجو..."><div class="search-suggestions" id="searchSuggestions"><div class="suggestion-chip">🎬 اکشن</div><div class="suggestion-chip">🏆 برترین</div><div class="suggestion-chip">🆕 جدید</div></div><div id="searchResults"></div></div>
+<div class="settings-panel" id="settingsPanel"><button class="close-btn" id="closeSettings">✕</button><h2 style="color:var(--accent-gold);margin:0 0 15px;font-size:20px">⚙️ تنظیمات</h2>
+  <div class="settings-item"><span class="settings-label"><span>🌐</span> <span id="langLabel">زبان</span></span><div class="lang-btn"><div class="lang-option active" data-lang="fa">فارسی</div><div class="lang-option" data-lang="en">English</div></div></div>
+  <div class="settings-item"><span class="settings-label"><span>🎨</span> رنگ اصلی</span><div class="color-themes" id="colorThemes"><div class="color-dot active" data-color="#ffd700,#d4a500" style="background:#ffd700"></div><div class="color-dot" data-color="#ff416c,#ff4b2b" style="background:#ff416c"></div><div class="color-dot" data-color="#00c6ff,#0072ff" style="background:#00c6ff"></div><div class="color-dot" data-color="#56ab2f,#a8e063" style="background:#56ab2f"></div></div></div>
+  <div class="settings-item"><span class="settings-label"><span>🔤</span> اندازه متن</span><div class="font-size-ctrl"><button class="fs-btn" id="fsMinus">−</button><span class="fs-val" id="fsVal">100%</span><button class="fs-btn" id="fsPlus">+</button></div></div>
+  <div class="settings-item"><span class="settings-label"><span>✨</span> ذرات</span><label><input type="checkbox" id="particleToggle" checked style="accent-color:var(--accent-gold)"></label></div>
+</div>
+<div class="category-page" id="categoryPage"><div class="category-header"><h2 id="categoryTitle">دسته بندی‌ها</h2><button class="close-btn" style="position:relative;top:0;left:0" id="closeCategory">✕</button></div><div class="grid-2x2" id="categoryGrid"></div></div>
+<div class="watchlist-panel" id="watchlistPanel"><button class="close-btn" id="closeWatchlist">✕</button><h2>🔖 لیست تماشا</h2><div id="watchlistContent"></div></div>
 
-            function createSmallCard(item, lang) {
-                const isFilm = item.type === 'film';
-                const isMusic = item.type === 'music';
-                const title = lang === 'fa' ? item.title : item.titleEn;
-                
-                let metaDisplay = '';
-                if (lang === 'fa') {
-                    metaDisplay = `${item.meta} • ${item.year}`;
-                } else {
-                    if (isFilm || item.type === 'series') {
-                        const rating = parseFloat(item.meta.split('⭐')[1]);
-                        metaDisplay = `⭐ ${rating.toFixed(1)} • ${item.year} min`;
-                    } else if (isMusic) {
-                        metaDisplay = `${item.metaEn} • ${item.yearEn}`;
-                    }
-                }
-                
-                return `
-                    <div class="small-card" data-channel="${item.channel}">
-                        <div class="small-card-image">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%2322354e'/%3E%3Ctext x='120' y='160' font-family='Arial' font-size='40' fill='%23ffd700'%3E${isFilm ? '🎬' : (isMusic ? '🎵' : '📺')}%3C/text%3E%3C/svg%3E" alt="${title}">
-                            <a href="${item.channel}" target="_blank" class="small-card-play">
-                                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
-                            </a>
-                        </div>
-                        <div class="small-card-content">
-                            <div class="small-card-title">${title}</div>
-                            <div class="small-card-meta">${metaDisplay}</div>
-                        </div>
-                    </div>
-                `;
-            }
+<script>
+(function(){
+const genres=['action','drama','comedy','horror','sci-fi'];
+const filmsData=Array(10).fill(null).map((_,i)=>({id:'f'+i,title:`فیلم ${i+1}`,titleEn:`Movie ${i+1}`,type:'film',meta:`⭐ ${(7.5+Math.random()*2).toFixed(1)}`,year:`${2015+i}`,channel:'https://t.me/film_channel',genre:genres[i%genres.length],badge:i<2?'new':i===3?'hot':null,progress:Math.floor(Math.random()*80),stars:Math.floor(Math.random()*2)+3}));
+const seriesData=Array(10).fill(null).map((_,i)=>({id:'s'+i,title:`سریال ${i+1}`,titleEn:`Series ${i+1}`,type:'series',meta:`⭐ ${(7.5+Math.random()*2).toFixed(1)}`,year:`${2018+i}`,channel:'https://t.me/series_channel',genre:genres[i%genres.length],badge:i===0?'new':i===2?'hot':null,progress:Math.floor(Math.random()*60),stars:Math.floor(Math.random()*2)+3}));
+const musicData=Array(10).fill(null).map((_,i)=>({id:'m'+i,title:`آهنگ ${i+1}`,titleEn:`Track ${i+1}`,type:'music',meta:`👥 ${Math.floor(Math.random()*5+1)}M`,metaEn:`${Math.floor(Math.random()*5+1)}M`,year:`۰${Math.floor(Math.random()*5+3)}:${String(Math.floor(Math.random()*59)).padStart(2,'0')}`,yearEn:`${Math.floor(Math.random()*5+3)}:${String(Math.floor(Math.random()*59)).padStart(2,'0')}`,channel:'https://t.me/music_channel',badge:i===1?'hot':null,progress:0,stars:4}));
 
-            function renderAll(lang = 'fa') {
-                document.getElementById('filmsContainer').innerHTML = filmsData.map(item => createSmallCard(item, lang)).join('');
-                document.getElementById('seriesContainer').innerHTML = seriesData.map(item => createSmallCard({...item, type: 'series'}, lang)).join('');
-                document.getElementById('musicContainer').innerHTML = musicData.map(item => createSmallCard(item, lang)).join('');
-                
-                document.querySelectorAll('.small-card').forEach(card => {
-                    card.addEventListener('click', function(e) {
-                        if (!e.target.closest('.small-card-play')) {
-                            const channel = this.dataset.channel;
-                            if (channel) window.open(channel, '_blank');
-                        }
-                    });
-                });
-            }
+let currentLang=localStorage.getItem('cinema-lang')||'fa';
+let currentTheme=localStorage.getItem('cinema-theme')||'dark';
+let likedCards=JSON.parse(localStorage.getItem('cinema-likes')||'{}');
+let savedCards=JSON.parse(localStorage.getItem('cinema-saved')||'{}');
+let commentLikes=JSON.parse(localStorage.getItem('cinema-clikes')||'{}');
+let viewModes={films:'scroll',series:'scroll',music:'scroll'};
+let fontSize=parseInt(localStorage.getItem('cinema-fs')||'100');
+let particlesEnabled=localStorage.getItem('cinema-particles')!=='false';
+let comments=JSON.parse(localStorage.getItem('cinemaComments')||'null')||[{id:'c1',name:'آرین',text:'طراحی عالی! 🔥',date:'۱۴۰۲/۱۲/۱۰',likes:4},{id:'c2',name:'سارا',text:'فیلم‌ها عالی بودن 😍',date:'۱۴۰۲/۱۲/۰۹',likes:2}];
 
-            let currentLang = localStorage.getItem('cinema-lang') || 'fa';
-            
-            const translations = {
-                fa: {
-                    mainTitle: 'سینما کانال',
-                    subtitle: 'تجربه سینمایی',
-                    badge: '⭐ جدیدترین فیلم‌ها و آهنگ‌ها ⭐',
-                    filmsTitle: '🎬 فیلم‌ها',
-                    seriesTitle: '📺 سریال‌ها',
-                    musicTitle: '🎵 آهنگ‌ها',
-                    commentsLabel: '💬 نظرات کاربران',
-                    categoryTitle: 'دسته بندی‌ها',
-                    langLabel: 'زبان',
-                    themeLabel: 'حالت نمایش'
-                },
-                en: {
-                    mainTitle: 'Cinema Channel',
-                    subtitle: 'Cinematic Experience',
-                    badge: '⭐ Latest Movies & Songs ⭐',
-                    filmsTitle: '🎬 Movies',
-                    seriesTitle: '📺 Series',
-                    musicTitle: '🎵 Songs',
-                    commentsLabel: '💬 User Comments',
-                    categoryTitle: 'Categories',
-                    langLabel: 'Language',
-                    themeLabel: 'Theme'
-                }
-            };
+function saveData(){localStorage.setItem('cinema-likes',JSON.stringify(likedCards));localStorage.setItem('cinema-saved',JSON.stringify(savedCards));localStorage.setItem('cinemaComments',JSON.stringify(comments));localStorage.setItem('cinema-clikes',JSON.stringify(commentLikes));}
+function showToast(msg,icon='✅'){const ct=document.getElementById('toastContainer');const t=document.createElement('div');t.className='toast';t.innerHTML=`<span>${icon} ${msg}</span>`;ct.appendChild(t);setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.remove(),350)},2500);}
 
-            function updateLanguage(lang) {
-                currentLang = lang;
-                localStorage.setItem('cinema-lang', lang);
-                
-                document.getElementById('mainTitle').innerText = translations[lang].mainTitle;
-                document.getElementById('subtitleText').innerText = translations[lang].subtitle;
-                document.getElementById('badgeText').innerText = translations[lang].badge;
-                document.getElementById('filmsTitle').innerHTML = translations[lang].filmsTitle;
-                document.getElementById('seriesTitle').innerHTML = translations[lang].seriesTitle;
-                document.getElementById('musicTitle').innerHTML = translations[lang].musicTitle;
-                document.getElementById('commentsLabel').innerText = translations[lang].commentsLabel;
-                document.getElementById('categoryTitle').innerText = translations[lang].categoryTitle;
-                document.getElementById('langLabel').innerText = translations[lang].langLabel;
-                document.getElementById('themeLabel').innerText = translations[lang].themeLabel;
-                
-                document.querySelectorAll('.lang-option').forEach(opt => {
-                    opt.classList.remove('active');
-                    if (opt.dataset.lang === lang) opt.classList.add('active');
-                });
-                
-                renderAll(lang);
-                renderComments();
-            }
+const canvas=document.getElementById('particleCanvas');const ctx=canvas.getContext('2d');let particles=[];
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}resizeCanvas();window.addEventListener('resize',resizeCanvas);
+for(let i=0;i<50;i++)particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,size:Math.random()*2+.3,life:1,decay:Math.random()*.003+.001});
+function animateParticles(){if(!particlesEnabled){ctx.clearRect(0,0,canvas.width,canvas.height);requestAnimationFrame(animateParticles);return;}ctx.clearRect(0,0,canvas.width,canvas.height);const isDark=document.documentElement.getAttribute('data-theme')==='dark';particles.forEach((p,idx)=>{p.x+=p.vx;p.y+=p.vy;p.life-=p.decay;if(p.life<=0||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height){particles[idx]={x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,size:Math.random()*2+.3,life:1,decay:Math.random()*.003+.001};return;}ctx.save();ctx.globalAlpha=p.life*(isDark?.4:.2);ctx.fillStyle=isDark?'rgba(255,215,0,0.8)':'rgba(180,130,0,0.6)';ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();});requestAnimationFrame(animateParticles);}animateParticles();
 
-            let currentTheme = localStorage.getItem('cinema-theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            
-            const lightBtnOld = document.getElementById('lightThemeBtn');
-            const darkBtnOld = document.getElementById('darkThemeBtn');
-            
-            function updateActiveButton(theme) {
-                if (theme === 'light') {
-                    lightBtnOld.classList.add('active');
-                    darkBtnOld.classList.remove('active');
-                } else {
-                    darkBtnOld.classList.add('active');
-                    lightBtnOld.classList.remove('active');
-                }
-            }
-            updateActiveButton(currentTheme);
-            
-            function setTheme(theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('cinema-theme', theme);
-                updateActiveButton(theme);
-            }
-            
-            lightBtnOld.addEventListener('click', () => setTheme('light'));
-            darkBtnOld.addEventListener('click', () => setTheme('dark'));
+window.addEventListener('scroll',()=>{const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;document.getElementById('scrollProgress').style.width=pct+'%';document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>200);});
+document.getElementById('scrollTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-            let comments = JSON.parse(localStorage.getItem('cinemaComments')) || [
-                { name: 'آرین', text: 'طراحی سایت عالی!', date: '۱۴۰۲/۱۲/۱۰' },
-                { name: 'سارا', text: 'فیلم‌ها عالی بودن', date: '۱۴۰۲/۱۲/۰۹' }
-            ];
-            
-            function renderComments() {
-                const commentsList = document.getElementById('commentsList');
-                const commentsCount = document.getElementById('commentsCount');
-                
-                if (comments.length === 0) {
-                    commentsList.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">نظری نیست</div>';
-                    commentsCount.innerText = '۰';
-                    return;
-                }
-                
-                let html = '';
-                comments.slice().reverse().forEach(c => {
-                    html += `
-                        <div class="comment-item">
-                            <div class="comment-name">
-                                <span>👤 ${c.name}</span>
-                                <span class="comment-date">${c.date}</span>
-                            </div>
-                            <div class="comment-text">${c.text}</div>
-                        </div>
-                    `;
-                });
-                commentsList.innerHTML = html;
-                commentsCount.innerText = comments.length;
-            }
-            
-            document.getElementById('sendCommentBtn')?.addEventListener('click', () => {
-                const name = document.getElementById('commentName').value.trim() || 'کاربر';
-                const text = document.getElementById('commentMessage').value.trim();
-                if (!text) return alert('لطفاً متن نظر را وارد کنید');
-                comments.push({ name, text, date: new Date().toLocaleDateString('fa-IR') });
-                localStorage.setItem('cinemaComments', JSON.stringify(comments));
-                renderComments();
-                document.getElementById('commentMessage').value = '';
-            });
+function animateCounter(el,target){let start=0,step=()=>{start+=Math.ceil(target/50);if(start>=target){el.textContent=target.toLocaleString('fa-IR');return;}el.textContent=start.toLocaleString('fa-IR');requestAnimationFrame(step);};step();}
+const statsObs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.stat-number').forEach(n=>animateCounter(n,parseInt(n.dataset.target)));statsObs.disconnect();}});},{threshold:.5});statsObs.observe(document.getElementById('statsBar'));
 
-            const searchPanel = document.getElementById('searchPanel');
-            const settingsPanel = document.getElementById('settingsPanel');
-            const categoryPage = document.getElementById('categoryPage');
-            
-            const navItems = document.querySelectorAll('.nav-item');
-            let currentActive = null;
+function imgSVG(type){const emoji=type==='film'?'🎬':type==='music'?'🎵':'📺';return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%2322354e'/%3E%3Ctext x='150' y='165' font-family='Arial' font-size='64' fill='%23ffd700'%3E${emoji}%3C/text%3E%3C/svg%3E`;}
+function createSmallCard(item,lang){const title=lang==='fa'?item.title:item.titleEn;const isLiked=!!likedCards[item.id];const isSaved=!!savedCards[item.id];const stars='★'.repeat(item.stars)+'☆'.repeat(5-item.stars);const div=document.createElement('div');div.className='small-card';div.dataset.id=item.id;div.innerHTML=`${item.badge?`<div class="card-badge badge-${item.badge}">${item.badge==='new'?'🆕':'🔥'}</div>`:''}<div class="small-card-image"><img src="${imgSVG(item.type)}" alt="${title}" loading="lazy"><div class="card-stars">${stars}</div><button class="card-like${isLiked?' liked':''}" data-id="${item.id}">${isLiked?'❤️':'🤍'}</button><button class="card-save${isSaved?' saved':''}" data-id="${item.id}">${isSaved?'🔖':'📌'}</button><a href="${item.channel}" target="_blank" class="small-card-play" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg></a></div><div class="small-card-content"><div class="small-card-title">${title}</div><div class="small-card-meta">${lang==='fa'?`${item.meta} • ${item.year}`:item.type==='music'?`${item.metaEn} • ${item.yearEn}`:`${item.meta} • ${item.year}`}</div><div class="watch-progress"><div class="watch-progress-fill" style="width:${item.progress||0}%"></div></div></div>`;
+  div.querySelector('.card-like')?.addEventListener('click',e=>{e.stopPropagation();likedCards[item.id]=!likedCards[item.id];e.currentTarget.classList.toggle('liked',likedCards[item.id]);e.currentTarget.textContent=likedCards[item.id]?'❤️':'🤍';saveData();});
+  div.querySelector('.card-save')?.addEventListener('click',e=>{e.stopPropagation();if(savedCards[item.id])delete savedCards[item.id];else savedCards[item.id]={...item};e.currentTarget.classList.toggle('saved',!!savedCards[item.id]);e.currentTarget.textContent=savedCards[item.id]?'🔖':'📌';saveData();if(document.getElementById('watchlistPanel').classList.contains('show'))renderWatchlist();});
+  div.addEventListener('click',e=>{if(!e.target.closest('.card-like')&&!e.target.closest('.card-save')&&!e.target.closest('.small-card-play'))window.open(item.channel,'_blank');});
+  return div;}
 
-            function setActiveNav(activeItem) {
-                navItems.forEach(item => item.classList.remove('active'));
-                if (activeItem) {
-                    activeItem.classList.add('active');
-                    currentActive = activeItem;
-                }
-            }
+function renderAll(){[filmsData,seriesData,musicData].forEach((data,idx)=>{const names=['films','series','music'];const container=document.getElementById(`${names[idx]}Container`);if(viewModes[names[idx]]==='scroll'){container.closest('div').innerHTML='<div class="horizontal-scroll"><div class="cards-horizontal" id="'+names[idx]+'Container"></div></div>';const newCont=document.getElementById(`${names[idx]}Container`);data.forEach(item=>newCont.appendChild(createSmallCard(item,currentLang)));}else{const parent=document.getElementById(`${names[idx]}View`);parent.innerHTML='<div class="cards-grid" id="'+names[idx]+'Container"></div>';const newCont=document.getElementById(`${names[idx]}Container`);data.forEach(item=>newCont.appendChild(createSmallCard(item,currentLang)));}});}
+document.querySelectorAll('.view-btn').forEach(btn=>{btn.addEventListener('click',()=>{const section=btn.dataset.section,mode=btn.dataset.view;btn.closest('.view-toggle').querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');viewModes[section]=mode;renderAll();});});
 
-            document.querySelector('[data-nav="home"]').addEventListener('click', () => {
-                setActiveNav(document.querySelector('[data-nav="home"]'));
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            
-            document.querySelector('[data-nav="categories"]').addEventListener('click', () => {
-                setActiveNav(document.querySelector('[data-nav="categories"]'));
-                categoryPage.classList.add('show');
-            });
-            
-            document.querySelector('[data-nav="search"]').addEventListener('click', () => {
-                setActiveNav(document.querySelector('[data-nav="search"]'));
-                searchPanel.classList.add('show');
-            });
-            
-            document.querySelector('[data-nav="settings"]').addEventListener('click', () => {
-                setActiveNav(document.querySelector('[data-nav="settings"]'));
-                settingsPanel.classList.add('show');
-            });
-            
-            document.getElementById('closeSearch').addEventListener('click', () => {
-                searchPanel.classList.remove('show');
-                if (currentActive?.dataset.nav === 'search') setActiveNav(null);
-            });
-            
-            document.getElementById('closeSettings').addEventListener('click', () => {
-                settingsPanel.classList.remove('show');
-                if (currentActive?.dataset.nav === 'settings') setActiveNav(null);
-            });
-            
-            document.getElementById('closeCategory').addEventListener('click', () => {
-                categoryPage.classList.remove('show');
-                if (currentActive?.dataset.nav === 'categories') setActiveNav(null);
-            });
-            
-            window.addEventListener('scroll', () => {
-                if (window.scrollY === 0 && currentActive?.dataset.nav !== 'home') {
-                    setActiveNav(document.querySelector('[data-nav="home"]'));
-                }
-            });
-            
-            const categoryGrid = document.getElementById('categoryGrid');
-            for (let i = 0; i < 10; i++) {
-                const card = document.createElement('div');
-                card.className = 'big-card';
-                card.addEventListener('click', () => alert(`کارت ${i+1} کلیک شد`));
-                categoryGrid.appendChild(card);
-            }
-            
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                const allItems = [...filmsData, ...seriesData, ...musicData];
-                const results = allItems.filter(item => 
-                    item.title.toLowerCase().includes(query) || 
-                    item.titleEn.toLowerCase().includes(query)
-                );
-                const resultsDiv = document.getElementById('searchResults');
-                if (results.length === 0) {
-                    resultsDiv.innerHTML = '<div style="text-align:center; padding:20px;">نتیجه‌ای یافت نشد</div>';
-                } else {
-                    resultsDiv.innerHTML = results.map(item => `
-                        <div class="small-card" style="margin-bottom:10px; width:100%;" data-channel="${item.channel}">
-                            <div style="display:flex; align-items:center; gap:10px; padding:10px;">
-                                <div style="width:60px; height:60px; background:var(--bg-secondary); border-radius:12px; display:flex; align-items:center; justify-content:center;">${item.type === 'film' ? '🎬' : (item.type === 'music' ? '🎵' : '📺')}</div>
-                                <div><strong>${currentLang === 'fa' ? item.title : item.titleEn}</strong><br><span style="font-size:12px; color:var(--text-muted);">${item.meta}</span></div>
-                            </div>
-                        </div>
-                    `).join('');
-                    document.querySelectorAll('#searchResults .small-card').forEach(card => {
-                        card.addEventListener('click', () => window.open(card.dataset.channel, '_blank'));
-                    });
-                }
-            });
-            
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', () => updateLanguage(opt.dataset.lang));
-            });
-            
-            setActiveNav(document.querySelector('[data-nav="home"]'));
-            
-            renderAll(currentLang);
-            renderComments();
-            updateLanguage(currentLang);
-        })();
-    </script>
+document.getElementById('filmsFilter')?.addEventListener('click',e=>{const chip=e.target.closest('.filter-chip');if(!chip)return;document.querySelectorAll('#filmsFilter .filter-chip').forEach(c=>c.classList.remove('active'));chip.classList.add('active');const filtered=chip.dataset.filter==='all'?filmsData:filmsData.filter(f=>f.genre===chip.dataset.filter);const c=document.getElementById('filmsContainer');c.innerHTML='';filtered.forEach(item=>c.appendChild(createSmallCard(item,currentLang)));});
+
+function renderComments(){const list=document.getElementById('commentsList');const countEl=document.getElementById('commentsCount');countEl.textContent=comments.length;if(!comments.length){list.innerHTML='<div style="text-align:center;padding:20px">نظری نیست</div>';return;}list.innerHTML='';[...comments].reverse().forEach(c=>{const liked=commentLikes[c.id]||0;const div=document.createElement('div');div.className='comment-item';div.innerHTML=`<div class="comment-name"><span>👤 ${c.name}</span><span class="comment-date">${c.date}</span></div><div class="comment-text">${c.text}</div><div class="comment-actions"><button class="comment-like-btn${liked?' liked':''}" data-cid="${c.id}">${liked?'❤️':'🤍'} ${(c.likes||0)+liked}</button></div>`;list.appendChild(div);});list.querySelectorAll('.comment-like-btn').forEach(btn=>{btn.addEventListener('click',()=>{const cid=btn.dataset.cid;if(commentLikes[cid])return;commentLikes[cid]=1;btn.classList.add('liked');const c=comments.find(x=>x.id===cid);if(c)c.likes=(c.likes||0)+1;renderComments();saveData();});});}
+document.getElementById('sendCommentBtn')?.addEventListener('click',()=>{const name=document.getElementById('commentName').value.trim()||'کاربر';const text=document.getElementById('commentMessage').value.trim();if(!text){showToast('متن نظر را وارد کنید','⚠️');return;}comments.push({id:'c'+Date.now(),name,text,date:new Date().toLocaleDateString('fa-IR'),likes:0});saveData();renderComments();document.getElementById('commentMessage').value='';showToast('نظر شما ثبت شد','✅');});
+document.getElementById('emojiBar')?.addEventListener('click',e=>{const btn=e.target.closest('.emoji-btn');if(btn){document.getElementById('commentMessage').value+=btn.dataset.emoji;}});
+
+document.documentElement.setAttribute('data-theme',currentTheme);
+function setTheme(t){currentTheme=t;document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cinema-theme',t);showToast(t==='dark'?'🌙 حالت تاریک':'☀️ حالت روشن');}
+document.getElementById('glassThemeBtn')?.addEventListener('click',()=>setTheme(currentTheme==='dark'?'light':'dark'));
+
+document.querySelectorAll('.color-dot').forEach(dot=>{dot.addEventListener('click',()=>{document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));dot.classList.add('active');const [c1,c2]=dot.dataset.color.split(',');document.documentElement.style.setProperty('--accent-gold-light',c1);document.documentElement.style.setProperty('--accent-gold',c2);localStorage.setItem('cinema-color',dot.dataset.color);showToast('رنگ اعمال شد');});});
+
+document.documentElement.style.fontSize=fontSize+'%';document.getElementById('fsVal').textContent=fontSize+'%';
+document.getElementById('fsPlus')?.addEventListener('click',()=>{if(fontSize<130){fontSize+=10;document.documentElement.style.fontSize=fontSize+'%';document.getElementById('fsVal').textContent=fontSize+'%';localStorage.setItem('cinema-fs',fontSize);}});
+document.getElementById('fsMinus')?.addEventListener('click',()=>{if(fontSize>80){fontSize-=10;document.documentElement.style.fontSize=fontSize+'%';document.getElementById('fsVal').textContent=fontSize+'%';localStorage.setItem('cinema-fs',fontSize);}});
+
+document.getElementById('particleToggle').checked=particlesEnabled;
+document.getElementById('particleToggle')?.addEventListener('change',e=>{particlesEnabled=e.target.checked;localStorage.setItem('cinema-particles',particlesEnabled);});
+
+const translations={fa:{mainTitle:'سینما کانال',subtitle:'تجربه سینمایی',badge:'⭐ جدیدترین فیلم‌ها و آهنگ‌ها ⭐',filmsTitle:'🎬 فیلم‌ها',seriesTitle:'📺 سریال‌ها',musicTitle:'🎵 آهنگ‌ها',commentsLabel:'💬 نظرات کاربران',categoryTitle:'دسته بندی‌ها',langLabel:'زبان',navHome:'خانه',navCategories:'دسته‌ها',navSearch:'جستجو',navSettings:'تنظیمات'},en:{mainTitle:'Cinema Channel',subtitle:'Cinematic Experience',badge:'⭐ Latest Movies & Songs ⭐',filmsTitle:'🎬 Movies',seriesTitle:'📺 Series',musicTitle:'🎵 Songs',commentsLabel:'💬 Comments',categoryTitle:'Categories',langLabel:'Language',navHome:'Home',navCategories:'List',navSearch:'Search',navSettings:'Settings'}};
+function updateLanguage(lang){currentLang=lang;localStorage.setItem('cinema-lang',lang);const t=translations[lang];document.getElementById('mainTitle').textContent=t.mainTitle;document.getElementById('subtitleText').textContent=t.subtitle;document.getElementById('badgeText').textContent=t.badge;document.getElementById('filmsTitle').innerHTML=t.filmsTitle;document.getElementById('seriesTitle').innerHTML=t.seriesTitle;document.getElementById('musicTitle').innerHTML=t.musicTitle;document.getElementById('commentsLabel').innerHTML=t.commentsLabel;document.getElementById('categoryTitle').innerHTML=t.categoryTitle;document.getElementById('langLabel').innerHTML=t.langLabel;document.getElementById('navHome').innerHTML=t.navHome;document.getElementById('navCategories').innerHTML=t.navCategories;document.getElementById('navSearch').innerHTML=t.navSearch;document.getElementById('navSettings').innerHTML=t.navSettings;document.querySelectorAll('.lang-option').forEach(o=>o.classList.toggle('active',o.dataset.lang===lang));renderAll();renderComments();}
+document.querySelectorAll('.lang-option').forEach(o=>o.addEventListener('click',()=>updateLanguage(o.dataset.lang)));
+
+const navBtns=document.querySelectorAll('.nav-btn');const activePill=document.getElementById('activePill');const navItemsContainer=document.getElementById('navItemsContainer');const navGlare=document.getElementById('navGlare');const searchPanel=document.getElementById('searchPanel');const settingsPanel=document.getElementById('settingsPanel');const categoryPage=document.getElementById('categoryPage');const watchlistPanel=document.getElementById('watchlistPanel');let currentActiveIdx=0;
+function updatePill(btn,smooth=true){if(!btn||!activePill)return;const btnRect=btn.getBoundingClientRect();const containerRect=navItemsContainer.getBoundingClientRect();const relativeLeft=btnRect.left-containerRect.left;if(smooth)activePill.style.transition='transform 0.4s cubic-bezier(0.34,1.2,0.64,1), width 0.4s cubic-bezier(0.34,1.2,0.64,1)';else activePill.style.transition='none';activePill.style.width=`${btnRect.width}px`;activePill.style.transform=`translateX(${relativeLeft}px)`;if(!smooth)void activePill.offsetHeight;}
+function setActiveNavBtn(index){if(index===currentActiveIdx)return;navBtns.forEach(btn=>btn.classList.remove('active'));const targetBtn=navBtns[index];targetBtn.classList.add('active');currentActiveIdx=index;updatePill(targetBtn,true);if(navGlare){navGlare.style.opacity='0.5';setTimeout(()=>{if(navGlare)navGlare.style.opacity='0';},150);}}
+function closeAllPanels(){searchPanel.classList.remove('show');settingsPanel.classList.remove('show');categoryPage.classList.remove('show');watchlistPanel.classList.remove('show');}
+navBtns.forEach((btn,idx)=>{btn.addEventListener('click',()=>{const action=btn.dataset.navAction;closeAllPanels();if(action==='home')window.scrollTo({top:0,behavior:'smooth'});else if(action==='categories')categoryPage.classList.add('show');else if(action==='search'){searchPanel.classList.add('show');setTimeout(()=>document.getElementById('searchInput')?.focus(),350);}else if(action==='settings')settingsPanel.classList.add('show');setActiveNavBtn(idx);});});
+document.getElementById('closeSearch')?.addEventListener('click',()=>searchPanel.classList.remove('show'));
+document.getElementById('closeSettings')?.addEventListener('click',()=>settingsPanel.classList.remove('show'));
+document.getElementById('closeCategory')?.addEventListener('click',()=>categoryPage.classList.remove('show'));
+document.getElementById('closeWatchlist')?.addEventListener('click',()=>watchlistPanel.classList.remove('show'));
+function renderWatchlist(){const content=document.getElementById('watchlistContent');const items=Object.values(savedCards);if(!items.length){content.innerHTML='<div class="watchlist-empty">🎬 لیست تماشا خالی است</div>';return;}content.innerHTML='<div class="watchlist-grid" id="wlGrid"></div>';const grid=document.getElementById('wlGrid');items.forEach(item=>grid.appendChild(createSmallCard(item,currentLang)));}
+
+document.getElementById('searchInput')?.addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();const res=document.getElementById('searchResults');if(!q){res.innerHTML='';return;}const all=[...filmsData,...seriesData,...musicData];const found=all.filter(i=>i.title.toLowerCase().includes(q)||i.titleEn.toLowerCase().includes(q));if(!found.length){res.innerHTML='<div style="text-align:center;padding:20px">🔍 نتیجه‌ای یافت نشد</div>';return;}const grid=document.createElement('div');grid.className='cards-grid';found.forEach(item=>grid.appendChild(createSmallCard(item,currentLang)));res.innerHTML='';res.appendChild(grid);});
+document.querySelectorAll('.suggestion-chip').forEach(chip=>{chip.addEventListener('click',()=>{const input=document.getElementById('searchInput');if(input){input.value=chip.textContent.replace(/[🎬🏆🆕]/g,'').trim();input.dispatchEvent(new Event('input'));}});});
+
+const catGrid=document.getElementById('categoryGrid');if(catGrid){for(let i=0;i<8;i++){const card=document.createElement('div');card.className='big-card';card.addEventListener('click',()=>showToast(`دسته ${i+1}`,`🎬`));catGrid.appendChild(card);}}
+
+const liquidNav=document.getElementById('liquidNav');if(liquidNav&&navGlare){liquidNav.addEventListener('mousemove',(e)=>{const rect=liquidNav.getBoundingClientRect();let x=e.clientX-rect.left,y=e.clientY-rect.top;x=Math.min(Math.max(x,0),rect.width);y=Math.min(Math.max(y,0),rect.height);navGlare.style.setProperty('--x',`${(x/rect.width)*100}%`);navGlare.style.setProperty('--y',`${(y/rect.height)*100}%`);});liquidNav.addEventListener('mouseleave',()=>{navGlare.style.setProperty('--x','50%');navGlare.style.setProperty('--y','50%');});}
+
+setTimeout(()=>{const active=document.querySelector('.nav-btn.active');if(active)updatePill(active,false);},50);
+window.addEventListener('resize',()=>{const active=document.querySelector('.nav-btn.active');if(active)updatePill(active,false);});
+setActiveNavBtn(0);
+updateLanguage(currentLang);
+setTimeout(()=>document.getElementById('pageTransition')?.classList.remove('enter'),600);
+})();
+</script>
 </body>
 </html>
